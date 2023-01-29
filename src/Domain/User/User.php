@@ -17,11 +17,9 @@ class User extends Model implements JsonSerializable
 {
     protected $table = 'users';
 
-    protected $fillable = ['username', 'firstName', 'lastName'];
+    protected $fillable = ['username', 'firstName', 'lastName', 'password'];
 
-    protected $guarded = ['id', 'password'];
-
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

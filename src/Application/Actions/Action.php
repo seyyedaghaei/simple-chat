@@ -21,6 +21,8 @@ abstract class Action
 
     protected array $args;
 
+    protected array $params;
+
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -37,6 +39,14 @@ abstract class Action
         $this->args = $args;
 
         try {
+            $body = $this->getFormData();
+            if (isset($this->params)) {
+                foreach ($this->params as $param) {
+                    if (!isset($body[$param])) {
+                        throw new HttpBadRequestException($request);
+                    }
+                }
+            }
             return $this->action();
         } catch (DomainRecordNotFoundException $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
