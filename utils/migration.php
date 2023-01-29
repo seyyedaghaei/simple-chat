@@ -37,19 +37,11 @@ $capsule->setAsGlobal();
  * @param Closure $callback
  * @return void
  */
-function createTable(string $table, Closure $callback)
+return function (string $table, Closure $callback)
 {
     try {
         Manager::table($table)->exists();
     } catch (QueryException $exception) {
                 Manager::schema()->create($table, $callback);
     }
-}
-
-createTable("users", function ($table) {
-    $table->increments('id');
-    $table->string('username', 30);
-    $table->timestamps();
-});
-
-echo "Migrated Successfully\n";
+};
