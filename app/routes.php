@@ -33,10 +33,10 @@ return function (App $app) {
         $group->get('/me', MeAction::class);
         $group->get('/chats', ChatsAction::class);
         $group->get('', ListUsersAction::class);
-        $group->get('/{id}', ViewUserAction::class);
+        $group->get('/{id:\d+}', ViewUserAction::class);
     })->add(AuthMiddleware::class);
 
     $app->group('/messages', function (Group $group) {
-        $group->get('/{id}', ListMessagesAction::class);
+        $group->get('/{id:\d+}', ListMessagesAction::class);
     })->add(AuthMiddleware::class);
 };
