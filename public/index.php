@@ -11,15 +11,13 @@ use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->safeLoad();
+require __DIR__ . '/../util/dotenv.php';
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-if (false) { // Should be set to true in production
-	$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+if ($_ENV['STAGE'] === 'PROD') { // Should be set to true in production
+    $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 }
 
 // Set up settings
@@ -49,6 +47,10 @@ $middleware($app);
 // Register routes
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
+
+// boot eloquent
+$eloquent = require __DIR__ . '/../app/eloquent.php';
+$eloquent($app);
 
 /** @var SettingsInterface $settings */
 $settings = $container->get(SettingsInterface::class);
