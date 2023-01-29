@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Tests\Application\Actions\Message;
+namespace Tests\Application\Actions\Auth;
 
+use Ahc\Jwt\JWT;
 use App\Application\Actions\ActionPayload;
-use App\Domain\Message\Message;
-use App\Domain\Message\MessageRepository;
 use App\Domain\User\UserRepository;
 use App\Domain\User\User;
 use DI\Container;
-use Exception;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Tests\TestCase;
 
-class ListMessageActionTest extends TestCase
+class RegisterActionTest extends TestCase
 {
     /**
-     * @throws Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function testAction()
     {
@@ -34,33 +35,23 @@ class ListMessageActionTest extends TestCase
 
         $userRepositoryProphecy = $this->prophesize(UserRepository::class);
         $userRepositoryProphecy
-            ->findUserOfId(1)
+            ->register('bill_gates', 'Bill', 'Gates', 'his_password')
             ->willReturn($user)
             ->shouldBeCalledOnce();
 
-        $message = Message::fromArray([
-            'id' => 1,
-            'from_id' => 1,
-            'to_id' => 2,
-            'message' => 'Hello',
-        ]);
-
-        $messageRepositoryProphecy = $this->prophesize(MessageRepository::class);
-
-        $messageRepositoryProphecy
-            ->findMessageByUser(1, 2, 10, 0)
-            ->willReturn([$message])
-            ->shouldBeCalledOnce();
-
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
-        $container->set(MessageRepository::class, $messageRepositoryProphecy->reveal());
 
-        $request = $this->createRequest('GET', '/messages/2');
-        $request = $this->addToken($app, $request);
+        $request = $this->createRequest('POST', '/register');
+        $request = $request->withParsedBody([
+            'username' => 'bill_gates',
+            'firstName' => 'Bill',
+            'lastName' => 'Gates',
+            'password' => 'his_password',
+        ]);
         $response = $app->handle($request);
 
         $payload = (string)$response->getBody();
-        $expectedPayload = new ActionPayload(200, [$message]);
+        $expectedPayload = new ActionPayload(200, $user);
         $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
 
         $this->assertEquals($serializedPayload, $payload);
