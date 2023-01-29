@@ -35,4 +35,9 @@ interface UserRepository
      * @throws UserNotFoundException
      */
     public function register(string $username, string $firstName, string $lastName, string $password): User;
+
+    /**
+     * @return User[]
+     */
+    public function chats(User $user): array;
 }

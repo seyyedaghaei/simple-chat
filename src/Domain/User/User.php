@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
+use App\Domain\Message\Message;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use JsonSerializable;
 
 /**
@@ -18,6 +20,16 @@ class User extends Model implements JsonSerializable
     protected $table = 'users';
 
     protected $fillable = ['username', 'first_name', 'last_name', 'password'];
+
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'to_id');
+    }
+
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'from_id');
+    }
 
     public function getId(): int
     {
