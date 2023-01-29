@@ -20,6 +20,15 @@ use Slim\Psr7\Uri;
 class TestCase extends PHPUnit_TestCase
 {
     use ProphecyTrait;
+    protected function setUp(): void
+    {
+        require __DIR__ . '/../utils/migrate.php';
+    }
+
+    protected function tearDown(): void
+    {
+        unlink($_ENV['DATABASE']);
+    }
 
     /**
      * @return App

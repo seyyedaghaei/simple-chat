@@ -31,6 +31,7 @@ $dbSettings = [
 $capsule = new Manager();
 $capsule->addConnection($dbSettings);
 $capsule->setAsGlobal();
+$capsule->bootEloquent();
 
 /**
  * @param string $table

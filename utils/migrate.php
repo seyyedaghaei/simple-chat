@@ -22,4 +22,6 @@ $createTable("messages", function ($table) {
     $table->timestamps();
 });
 
-echo "Migrated Successfully\n";
+if (!defined('TEST')) {
+    echo "Migrated Successfully\n";
+}

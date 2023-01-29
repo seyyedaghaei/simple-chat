@@ -25,7 +25,12 @@ class EloquentUserRepository implements UserRepository
      */
     public function findUserOfId(int $id): User
     {
-        $user = User::query()->find($id)->first();
+        $model = User::query()->find($id);
+        if (!isset($model)) {
+            throw new UserNotFoundException();
+        }
+
+        $user = $model->first();
         if (!isset($user)) {
             throw new UserNotFoundException();
         }
