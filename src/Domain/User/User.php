@@ -10,14 +10,14 @@ use JsonSerializable;
 /**
  * @property int $id
  * @property string $username
- * @property string $firstName
- * @property string $lastName
+ * @property string $first_name
+ * @property string $last_name
  */
 class User extends Model implements JsonSerializable
 {
     protected $table = 'users';
 
-    protected $fillable = ['username', 'firstName', 'lastName', 'password'];
+    protected $fillable = ['username', 'first_name', 'last_name', 'password'];
 
     public function getId(): int
     {
@@ -31,12 +31,12 @@ class User extends Model implements JsonSerializable
 
     public function getFirstName(): string
     {
-        return $this->firstName;
+        return $this->first_name;
     }
 
     public function getLastName(): string
     {
-        return $this->lastName;
+        return $this->last_name;
     }
 
     #[\ReturnTypeWillChange]
@@ -45,8 +45,8 @@ class User extends Model implements JsonSerializable
         return [
             'id' => $this->id,
             'username' => $this->username,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
+            'firstName' => $this->first_name,
+            'lastName' => $this->last_name,
         ];
     }
 }

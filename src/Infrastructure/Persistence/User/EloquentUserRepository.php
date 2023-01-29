@@ -57,8 +57,8 @@ class EloquentUserRepository implements UserRepository
         try {
             return User::query()->create([
                 'username' => $username,
-                'firstName' => $firstName,
-                'lastName' => $lastName,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
                 'password' => $this->hashPassword($password),
             ]);
         } catch (\Exception $e) {

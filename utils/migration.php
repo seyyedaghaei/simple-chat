@@ -39,9 +39,7 @@ $capsule->setAsGlobal();
  */
 return function (string $table, Closure $callback)
 {
-    try {
-        Manager::table($table)->exists();
-    } catch (QueryException $exception) {
-                Manager::schema()->create($table, $callback);
+    if (!Manager::schema()->hasTable($table)) {
+        Manager::schema()->create($table, $callback);
     }
 };

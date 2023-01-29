@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Application\Actions\Auth\LoginAction;
 use App\Application\Actions\Auth\RegisterAction;
+use App\Application\Actions\Message\ListMessagesAction;
 use App\Application\Actions\User\ListUsersAction;
+use App\Application\Actions\User\MeAction;
 use App\Application\Actions\User\ViewUserAction;
 use App\Application\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -27,7 +29,13 @@ return function (App $app) {
     $app->post('/login', LoginAction::class);
 
     $app->group('/users', function (Group $group) {
+        $group->get('/me', MeAction::class);
+        $group->get('/chats', MeAction::class);
         $group->get('', ListUsersAction::class);
         $group->get('/{id}', ViewUserAction::class);
+    })->add(AuthMiddleware::class);
+
+    $app->group('/messages', function (Group $group) {
+        $group->get('/{id}', ListMessagesAction::class);
     })->add(AuthMiddleware::class);
 };
