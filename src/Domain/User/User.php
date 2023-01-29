@@ -51,6 +51,15 @@ class User extends Model implements JsonSerializable
         return $this->last_name;
     }
 
+    public static function fromArray($array): User
+    {
+        $user = new User();
+        foreach ($array as $key => $value) {
+            $user->{$key} = $value;
+        }
+        return $user;
+    }
+
     #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {

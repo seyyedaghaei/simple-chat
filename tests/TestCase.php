@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Ahc\Jwt\JWT;
 use DI\ContainerBuilder;
 use Exception;
 use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
@@ -58,24 +59,28 @@ class TestCase extends PHPUnit_TestCase
         $routes = require __DIR__ . '/../app/routes.php';
         $routes($app);
 
+        $eloquent = require __DIR__ . '/../app/eloquent.php';
+        $eloquent($app);
+
         return $app;
     }
 
     /**
      * @param string $method
      * @param string $path
-     * @param array  $headers
-     * @param array  $cookies
-     * @param array  $serverParams
+     * @param array $headers
+     * @param array $cookies
+     * @param array $serverParams
      * @return Request
      */
     protected function createRequest(
         string $method,
         string $path,
-        array $headers = ['HTTP_ACCEPT' => 'application/json'],
-        array $cookies = [],
-        array $serverParams = []
-    ): Request {
+        array  $headers = ['HTTP_ACCEPT' => 'application/json'],
+        array  $cookies = [],
+        array  $serverParams = []
+    ): Request
+    {
         $uri = new Uri('', '', 80, $path);
         $handle = fopen('php://temp', 'w+');
         $stream = (new StreamFactory())->createStreamFromResource($handle);
@@ -86,5 +91,17 @@ class TestCase extends PHPUnit_TestCase
         }
 
         return new SlimRequest($method, $uri, $h, $cookies, $serverParams, $stream);
+    }
+
+    /**
+     * @param App $app
+     * @param Request $request
+     * @param int $userId
+     * @return Request
+     */
+    function addToken(App $app, Request $request, int $userId = 1): Request
+    {
+        $token = $app->getContainer()->get(JWT::class)->encode(['id' => $userId]);
+        return $request->withHeader('Authorization', 'Bearer ' . $token);
     }
 }

@@ -29,11 +29,11 @@ class AuthMiddleware implements Middleware
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
-        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (empty($request->getHeaderLine('Authorization'))) {
             throw new HttpUnauthorizedException($request);
         }
 
-        $auth = $_SERVER['HTTP_AUTHORIZATION'];
+        $auth = $request->getHeaderLine('Authorization');
         if (!str_starts_with($auth, 'Bearer ')) {
             throw new HttpUnauthorizedException($request);
         }

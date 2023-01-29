@@ -23,17 +23,33 @@ class ViewUserActionTest extends TestCase
         /** @var Container $container */
         $container = $app->getContainer();
 
-        $user = new User(1, 'bill.gates', 'Bill', 'Gates');
+        $user = User::fromArray([
+            'id' => 1,
+            'username' => 'bill_gates',
+            'first_name' => 'Bill',
+            'last_name' => 'Gates',
+        ]);
 
+        $loggedInUser = User::fromArray([
+            'id' => 2,
+            'username' => 'steve_jobs',
+            'first_name' => 'Steve',
+            'last_name' => 'Jobs',
+        ]);
         $userRepositoryProphecy = $this->prophesize(UserRepository::class);
         $userRepositoryProphecy
             ->findUserOfId(1)
             ->willReturn($user)
             ->shouldBeCalledOnce();
+        $userRepositoryProphecy
+            ->findUserOfId(2)
+            ->willReturn($loggedInUser)
+            ->shouldBeCalledOnce();
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
         $request = $this->createRequest('GET', '/users/1');
+        $request = $this->addToken($app, $request, 2);
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();
@@ -59,15 +75,28 @@ class ViewUserActionTest extends TestCase
         /** @var Container $container */
         $container = $app->getContainer();
 
+        $loggedInUser = User::fromArray([
+            'id' => 2,
+            'username' => 'steve_jobs',
+            'first_name' => 'Steve',
+            'last_name' => 'Jobs',
+        ]);
+
         $userRepositoryProphecy = $this->prophesize(UserRepository::class);
         $userRepositoryProphecy
             ->findUserOfId(1)
             ->willThrow(new UserNotFoundException())
             ->shouldBeCalledOnce();
 
+        $userRepositoryProphecy
+            ->findUserOfId(2)
+            ->willReturn($loggedInUser)
+            ->shouldBeCalledOnce();
+
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
         $request = $this->createRequest('GET', '/users/1');
+        $request = $this->addToken($app, $request, 2);
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();

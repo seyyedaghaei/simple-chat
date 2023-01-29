@@ -19,9 +19,18 @@ class ListUserActionTest extends TestCase
         /** @var Container $container */
         $container = $app->getContainer();
 
-        $user = new User(1, 'bill.gates', 'Bill', 'Gates');
+        $user = User::fromArray([
+            'id' => 1,
+            'username' => 'bill_gates',
+            'first_name' => 'Bill',
+            'last_name' => 'Gates',
+        ]);
 
         $userRepositoryProphecy = $this->prophesize(UserRepository::class);
+        $userRepositoryProphecy
+            ->findUserOfId(1)
+            ->willReturn($user)
+            ->shouldBeCalledOnce();
         $userRepositoryProphecy
             ->findAll()
             ->willReturn([$user])
@@ -30,9 +39,10 @@ class ListUserActionTest extends TestCase
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
         $request = $this->createRequest('GET', '/users');
+        $request = $this->addToken($app, $request);
         $response = $app->handle($request);
 
-        $payload = (string) $response->getBody();
+        $payload = (string)$response->getBody();
         $expectedPayload = new ActionPayload(200, [$user]);
         $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
 
