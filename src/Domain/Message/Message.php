@@ -49,6 +49,7 @@ class Message extends Model implements JsonSerializable
             'message' => $this->message,
             'fromId' => $this->from_id,
             'toId' => $this->to_id,
+            'createdAt' => $this->created_at,
         ];
     }
 }

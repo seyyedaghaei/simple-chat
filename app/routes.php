@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Application\Actions\Auth\LoginAction;
 use App\Application\Actions\Auth\RegisterAction;
 use App\Application\Actions\Message\ListMessagesAction;
+use App\Application\Actions\Message\SendMessageAction;
 use App\Application\Actions\User\ChatsAction;
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\MeAction;
@@ -30,13 +31,14 @@ return function (App $app) {
     $app->post('/login', LoginAction::class);
 
     $app->group('/users', function (Group $group) {
+        $group->get('', ListUsersAction::class);
         $group->get('/me', MeAction::class);
         $group->get('/chats', ChatsAction::class);
-        $group->get('', ListUsersAction::class);
         $group->get('/{id:\d+}', ViewUserAction::class);
     })->add(AuthMiddleware::class);
 
     $app->group('/messages', function (Group $group) {
+        $group->post('', SendMessageAction::class);
         $group->get('/{id:\d+}', ListMessagesAction::class);
     })->add(AuthMiddleware::class);
 };
