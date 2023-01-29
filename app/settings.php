@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Ahc\Jwt\JWT;
 use App\Application\Settings\Settings;
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
@@ -17,7 +18,7 @@ return function (ContainerBuilder $containerBuilder) {
                 'logError'            => false,
                 'logErrorDetails'     => false,
                 'logger' => [
-                    'name' => 'slim-app',
+                    'name' => 'simple-chat',
                     'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
@@ -29,6 +30,9 @@ return function (ContainerBuilder $containerBuilder) {
                     'prefix'    => '',
                 ],
             ]);
+        },
+        JWT::class => function () {
+            return new JWT($_ENV['JWT_SECRET']);
         }
     ]);
 };
