@@ -108,7 +108,7 @@ class TestCase extends PHPUnit_TestCase
      * @param int $userId
      * @return Request
      */
-    function addToken(App $app, Request $request, int $userId = 1): Request
+    protected function addToken(App $app, Request $request, int $userId = 1): Request
     {
         $token = $app->getContainer()->get(JWT::class)->encode(['id' => $userId]);
         return $request->withHeader('Authorization', 'Bearer ' . $token);
