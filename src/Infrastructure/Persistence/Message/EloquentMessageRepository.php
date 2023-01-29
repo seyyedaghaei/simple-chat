@@ -39,10 +39,10 @@ class EloquentMessageRepository implements MessageRepository
      */
     public function createMessage(int $fromId, int $toId, string $message): Message
     {
-        return Message::query()->create([
+        return Message::fromArray(Message::query()->create([
             'from_id' => $fromId,
             'to_id' => $toId,
             'message' => $message,
-        ]);
+        ]));
     }
 }

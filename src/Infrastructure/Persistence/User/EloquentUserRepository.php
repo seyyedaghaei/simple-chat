@@ -8,6 +8,7 @@ use App\Domain\User\User;
 use App\Domain\User\UserAlreadyExists;
 use App\Domain\User\UserNotFoundException;
 use App\Domain\User\UserRepository;
+use Exception;
 
 class EloquentUserRepository implements UserRepository
 {
@@ -50,38 +51,39 @@ class EloquentUserRepository implements UserRepository
             throw new UserNotFoundException();
         }
 
-        return $user;
+        return User::fromArray($user);
     }
 
     /**
      * {@inheritdoc}
+     * @throws UserAlreadyExists
      */
     public function register(string $username, string $firstName, string $lastName, string $password): User
     {
         try {
-            return User::query()->create([
+            return User::fromArray(User::query()->create([
                 'username' => $username,
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'password' => $this->hashPassword($password),
-            ]);
-        } catch (\Exception $e) {
+            ]));
+        } catch (Exception) {
             throw new UserAlreadyExists();
         }
     }
 
-    protected function hashPassword(string $password)
+    protected function hashPassword(string $password): bool|string
     {
         return hash('sha256', $password);
     }
 
     public function chats(User $user): array
     {
-        $sentChats = $user->sentMessages()->distinct()->get('to_id')->map(function ($a) {
+        $sentChats = $user->sentMessages()->get('to_id')->map(function ($a) {
             return $a['to_id'];
         });
 
-        $receivedChats = $user->receivedMessages()->distinct()->get('from_id')->map(function ($a) {
+        $receivedChats = $user->receivedMessages()->get('from_id')->map(function ($a) {
             return $a['from_id'];
         });
 

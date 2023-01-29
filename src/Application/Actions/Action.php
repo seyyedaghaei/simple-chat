@@ -74,7 +74,7 @@ abstract class Action
     protected function resolveArg(string $name)
     {
         if (!isset($this->args[$name])) {
-            throw new HttpBadRequestException($this->request, "Could not resolve argument `{$name}`.");
+            throw new HttpBadRequestException($this->request, "Could not resolve argument `$name`.");
         }
 
         return $this->args[$name];

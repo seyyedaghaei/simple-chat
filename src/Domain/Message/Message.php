@@ -14,6 +14,7 @@ use JsonSerializable;
  * @property string $message
  * @property int $from_id
  * @property int $to_id
+ * @property mixed $created_at
  */
 class Message extends Model implements JsonSerializable
 {
@@ -39,6 +40,15 @@ class Message extends Model implements JsonSerializable
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    public static function fromArray($array): Message
+    {
+        $message = new Message();
+        foreach ($array as $key => $value) {
+            $message->{$key} = $value;
+        }
+        return $message;
     }
 
     #[\ReturnTypeWillChange]

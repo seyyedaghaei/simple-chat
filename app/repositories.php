@@ -7,6 +7,7 @@ use App\Domain\User\UserRepository;
 use App\Infrastructure\Persistence\Message\EloquentMessageRepository;
 use App\Infrastructure\Persistence\User\EloquentUserRepository;
 use DI\ContainerBuilder;
+
 use function DI\autowire;
 
 return function (ContainerBuilder $containerBuilder) {

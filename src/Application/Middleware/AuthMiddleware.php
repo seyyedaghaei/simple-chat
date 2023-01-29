@@ -6,6 +6,7 @@ namespace App\Application\Middleware;
 
 use Ahc\Jwt\JWT;
 use App\Domain\User\UserRepository;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
@@ -42,7 +43,7 @@ class AuthMiddleware implements Middleware
             $session = $this->jwt->decode(substr($auth, 7));
             $user = $this->userRepository->findUserOfId($session['id']);
             $request = $request->withAttribute('user', $user);
-        } catch (\Exception $e) {
+        } catch (Exception) {
             throw new HttpUnauthorizedException($request);
         }
 

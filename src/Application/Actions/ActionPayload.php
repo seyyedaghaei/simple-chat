@@ -35,7 +35,7 @@ class ActionPayload implements JsonSerializable
     /**
      * @return array|null|object
      */
-    public function getData()
+    public function getData(): object|array|null
     {
         return $this->data;
     }
