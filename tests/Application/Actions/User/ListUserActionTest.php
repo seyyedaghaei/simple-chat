@@ -8,10 +8,14 @@ use App\Application\Actions\ActionPayload;
 use App\Domain\User\UserRepository;
 use App\Domain\User\User;
 use DI\Container;
+use Exception;
 use Tests\TestCase;
 
 class ListUserActionTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testAction()
     {
         $app = $this->getAppInstance();

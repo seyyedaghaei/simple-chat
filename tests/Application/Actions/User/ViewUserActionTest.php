@@ -11,11 +11,15 @@ use App\Domain\User\User;
 use App\Domain\User\UserNotFoundException;
 use App\Domain\User\UserRepository;
 use DI\Container;
+use Exception;
 use Slim\Middleware\ErrorMiddleware;
 use Tests\TestCase;
 
 class ViewUserActionTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testAction()
     {
         $app = $this->getAppInstance();
