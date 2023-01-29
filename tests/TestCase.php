@@ -20,6 +20,7 @@ use Slim\Psr7\Uri;
 class TestCase extends PHPUnit_TestCase
 {
     use ProphecyTrait;
+
     protected function setUp(): void
     {
         require __DIR__ . '/../utils/migrate.php';
@@ -85,11 +86,10 @@ class TestCase extends PHPUnit_TestCase
     protected function createRequest(
         string $method,
         string $path,
-        array  $headers = ['HTTP_ACCEPT' => 'application/json'],
-        array  $cookies = [],
-        array  $serverParams = []
-    ): Request
-    {
+        array $headers = ['HTTP_ACCEPT' => 'application/json'],
+        array $cookies = [],
+        array $serverParams = []
+    ): Request {
         $uri = new Uri('', '', 80, $path);
         $handle = fopen('php://temp', 'w+');
         $stream = (new StreamFactory())->createStreamFromResource($handle);

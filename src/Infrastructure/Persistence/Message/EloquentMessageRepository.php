@@ -37,7 +37,8 @@ class EloquentMessageRepository implements MessageRepository
     /**
      * {@inheritdoc}
      */
-    public function createMessage(int $fromId, int $toId, string $message): Message {
+    public function createMessage(int $fromId, int $toId, string $message): Message
+    {
         return Message::query()->create([
             'from_id' => $fromId,
             'to_id' => $toId,

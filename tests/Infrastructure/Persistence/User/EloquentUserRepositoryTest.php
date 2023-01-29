@@ -23,7 +23,7 @@ class EloquentUserRepositoryTest extends TestCase
         $userRepository = new EloquentUserRepository();
         $userRepository->register('bill_gates', 'Bill', 'Gates', 'password');
 
-        $this->assertEquals(json_encode([$user]),json_encode($userRepository->findAll()));
+        $this->assertEquals(json_encode([$user]), json_encode($userRepository->findAll()));
     }
 
     public function testFindAllUsersByDefault()
@@ -63,7 +63,7 @@ class EloquentUserRepositoryTest extends TestCase
 
         $userRepository->register('bill_gates', 'Bill', 'Gates', 'password');
 
-        $this->assertEquals(json_encode($user),json_encode($userRepository->findUserOfId(1)));
+        $this->assertEquals(json_encode($user), json_encode($userRepository->findUserOfId(1)));
     }
 
     public function testFindUserOfIdThrowsNotFoundException()

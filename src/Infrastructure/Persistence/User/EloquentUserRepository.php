@@ -11,7 +11,6 @@ use App\Domain\User\UserRepository;
 
 class EloquentUserRepository implements UserRepository
 {
-
     /**
      * {@inheritdoc}
      */
@@ -76,7 +75,8 @@ class EloquentUserRepository implements UserRepository
         return hash('sha256', $password);
     }
 
-    public function chats(User $user): array {
+    public function chats(User $user): array
+    {
         $sentChats = $user->sentMessages()->distinct()->get('to_id')->map(function ($a) {
             return $a['to_id'];
         });
