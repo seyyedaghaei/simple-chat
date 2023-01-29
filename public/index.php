@@ -11,7 +11,7 @@ use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../util/dotenv.php';
+require __DIR__ . '/../utils/dotenv.php';
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
