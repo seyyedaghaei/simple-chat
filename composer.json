@@ -20,7 +20,7 @@
         "php": "^8.1",
         "ext-json": "*",
         "adhocore/jwt": "^1.1",
-        "illuminate/database": "^9.48",
+        "illuminate/database": "^9.49",
         "monolog/monolog": "^2.8",
         "php-di/php-di": "^6.4",
         "slim/psr7": "^1.6",
